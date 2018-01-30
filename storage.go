@@ -32,6 +32,7 @@ func main() {
 	router.GET("/entries", show)
 	router.GET("/entries/:key", show)
 	router.PUT("/entries/:key/:value", update)
+	router.DELETE("/entries/:key", destroy)
 
 	log.Print("Starting storage on ", addr)
 	err := http.ListenAndServe(addr, router)
@@ -68,6 +69,20 @@ func update(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	log.Print("Update collection: ", p, storage)
 	data := make(ResponseData)
 	data["key"], data["value"] = k, v
+
+	resp.Data = data
+	fmt.Fprintf(w, resp.toJson())
+}
+
+func destroy(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	k := p.ByName("key")
+	resp := &Response{Status: "success"}
+
+	delete(storage, k)
+
+	log.Print("Delete key: ", p, storage)
+	data := make(ResponseData)
+	data["key"] = k
 
 	resp.Data = data
 	fmt.Fprintf(w, resp.toJson())

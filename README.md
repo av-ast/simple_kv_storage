@@ -25,3 +25,12 @@ Simple key-value storage with HTTP REST interface.
     curl -XGET http://localhost:8000/entries
 
     {"status":"success","data":{"some_key":"some_value"}}
+
+#### Delete key
+    curl -XDELETE http://localhost:8000/entries/some_key
+
+    {"status":"success","data":{"some_key":"some_value"}}
+    
+    curl -XGET http://localhost:8000/entries
+
+    {"status":"success","data":{}}
